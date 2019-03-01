@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<!--<nav th:replace="fragments :: navigation"></nav>-->
+<div class="container" style="background:#FFFFF0;">
+    <a th:href="@{'/recipe'}" method="get">
+        <button class="btn btn-default">Home</button>
+    </a>
+    <div class="header">
+        <center style="font-size:30px;" th:text="${title}">Default title</center>
+    </div>
+    <a th:href="@{'/ingredient/add'}" th:object="${ingredient}" method="get">
+        <button class="btn btn-success">Add an Ingredient</button>
+    </a>
+    <hr />
+    <p th:unless="${ingredients} and ${ingredients.size()}">no ingredients :-(</p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tr th:each="ingredient : ${ingredients}">
+        <tr>
+            <td th:id = "${ingredient.id}" ><a th:href="@{'/ingredient/edit/' + ${ingredient.id}}"
+                                               th:text="${ingredient.ingredientName}"></a></td>
+            <td>
+                <a th:href="@{'/ingredient/delete/'+${ingredient.id}}" th:object="${ingredient}" method="post">
+                    <button type="submit" class="btn btn-danger" onClick="return confirm('sure?')">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tr>
+    </table>
+    <hr />
+</div>
+
+</body>
+</html>

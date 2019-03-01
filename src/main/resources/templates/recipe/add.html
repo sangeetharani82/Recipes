@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+
+<!--<nav th:replace="fragments :: navigation"></nav>-->
+<div class="container" style="background:#FFFFF0;">
+    <a th:href="@{'/recipe'}" method="get">
+        <button class="btn btn-default">Home</button>
+    </a>
+    <div class="header">
+        <center style="font-size:30px;" th:text="${title}">Default title</center>
+    </div>
+
+    <hr/>
+    <form method="post" style="max-width:500px;" th:object="${recipe}">
+        <div class="form-group">
+            <label th:for="recipeName">Title</label>
+            <input type="text" class="form-control" th:field="*{recipeName}" placeholder="Title" />
+            <span th:errors="*{recipeName}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="courseName">Course</label>
+            <select class="form-control" name="courseId" required="required">
+                <option value="">--Please choose a Course--</option>
+                <option th:each="course : ${courses}"
+                        th:text="${course.courseName}"
+                        th:value="${course.id}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label th:for="category">Category</label>
+            <select class="form-control" name="categoryId" required="required">
+                <option value="">--Please choose a Category--</option>
+                <option th:each="category : ${categories}"
+                        th:text="${category.categoryName}"
+                        th:value="${category.id}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label th:for="servingSize">Serving Size</label>
+            <input type="text" class="form-control" th:field="*{servingSize}" placeholder="Serving size.."/>
+            <span th:errors="*{servingSize}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="prepTime">Prep Time</label>
+            <input type="text" class="form-control" th:field="*{prepTime}" placeholder="Prep Time" />
+            <span th:errors="*{prepTime}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="cookTime">Cook Time</label>
+            <input type="text" class="form-control" th:field="*{cookTime}" placeholder="Cook Time"/>
+            <span th:errors="*{cookTime}" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label th:for="direction">Direction</label>
+            <textarea class="form-control" th:field="*{direction}" placeholder="Cooking method.." style="height:200px"></textarea>
+            <span th:errors="*{direction}" class="error"></span>
+        </div>
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
+    <hr/>
+</div>
+
+</body>
+</html>

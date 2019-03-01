@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<!--<nav th:replace="fragments :: navigation"></nav>-->
+<div class="container" style="background:#FFFFF0;">
+    <a th:href="@{'/recipe'}" method="get">
+        <button class="btn btn-default">Home</button>
+    </a>
+    <div class="header">
+        <center style="font-size:30px;" th:text="${title}">Default title</center>
+    </div>
+    <hr/>
+    <ul th:each="ingredients : ${recipe.ingredients}">
+        <ul th:each="ingredient : ${ingredients}">
+            <li th:id="${ingredient.id}" th:text="${ingredient.ingredientName}"></li>
+        </ul>
+    </ul>
+    <p th:unless="${recipe.ingredients.size()}">no ingredients yet</p>
+    <p><a th:href="'/recipe/add-ingredients/' + ${recipe.id}">Add Ingredient</a></p>
+</div>
+
+</body>
+</html>

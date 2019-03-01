@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<div class="container" style="background:#FFFFF0;">
+    <div class="alert alert-success">
+        <strong th:text="${message}">Success!</strong>
+    </div>
+    <a th:href="@{'/course'}" method="get">
+        <button class="btn btn-default">Home</button>
+    </a>
+    <a th:href="@{'/course/add'}" th:object="${course}" method="get">
+        <button class="btn btn-success">Add a Course</button>
+    </a>
+</div>
+</body>
+</html>
