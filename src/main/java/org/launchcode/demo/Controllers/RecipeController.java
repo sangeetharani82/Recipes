@@ -1,14 +1,8 @@
 package org.launchcode.demo.Controllers;
 
 
-import org.launchcode.demo.models.Category;
-import org.launchcode.demo.models.Course;
-import org.launchcode.demo.models.Ingredient;
-import org.launchcode.demo.models.Recipe;
-import org.launchcode.demo.models.data.CategoryDao;
-import org.launchcode.demo.models.data.CourseDao;
-import org.launchcode.demo.models.data.IngredientDao;
-import org.launchcode.demo.models.data.RecipeDao;
+import org.launchcode.demo.models.*;
+import org.launchcode.demo.models.data.*;
 import org.launchcode.demo.models.forms.AddIngredientsToRecipeForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -95,6 +89,7 @@ public class RecipeController {
         return "recipe/add-ingredients";
     }
 
+
     @RequestMapping(value="add-ingredients", method = RequestMethod.POST)
     public String processAddIngredients(@ModelAttribute @Valid AddIngredientsToRecipeForm form, Errors errors,
                                         Model model){
@@ -177,8 +172,8 @@ public class RecipeController {
         Course cor = courseDao.findOne(id);
         List<Recipe> recipes = cor.getRecipes();
         model.addAttribute("recipes", recipes);
-        model.addAttribute("title", "Recipes in Course "+ cor.getCourseName());
-        return "recipe/index";
+        model.addAttribute("title", cor.getCourseName() + " recipes");
+        return "recipe/list-under";
     }
     //recipes in a category
     @RequestMapping(value = "category", method = RequestMethod.GET)
@@ -186,7 +181,7 @@ public class RecipeController {
         Category cat = categoryDao.findOne(id);
         List<Recipe> recipes = cat.getRecipes();
         model.addAttribute("recipes", recipes);
-        model.addAttribute("title", "Recipes in Category" + cat.getCategoryName());
-        return "recipe/index";
+        model.addAttribute("title", cat.getCategoryName() + " recipes");
+        return "recipe/list-under";
     }
 }
