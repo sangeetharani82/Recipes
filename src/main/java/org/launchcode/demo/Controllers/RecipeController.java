@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -70,11 +71,8 @@ public class RecipeController {
         newRecipe.setCategory(cat);
         recipeDao.save(newRecipe);
 
-        model.addAttribute("message", "Recipe added successfully!");
         model.addAttribute("title", newRecipe.getRecipeName());
-        //return "addIngredients/view";
         return "redirect:view/" + newRecipe.getId();
-        // return "redirect:single/"+newRecipe.getId();
     }
 
     @RequestMapping(value="view/{id}", method = RequestMethod.GET)
@@ -82,7 +80,7 @@ public class RecipeController {
         Recipe recipe = recipeDao.findOne(id);
         model.addAttribute("title", recipe.getRecipeName());
         model.addAttribute("recipe", recipe);
-        model.addAttribute("id", id);
+        model.addAttribute("message", "Added successfully!");
         return "recipe/view";
     }
 
@@ -99,7 +97,7 @@ public class RecipeController {
 
     @RequestMapping(value="add-ingredients", method = RequestMethod.POST)
     public String processAddIngredients(@ModelAttribute @Valid AddIngredientsToRecipeForm form, Errors errors,
-                          Model model){
+                                        Model model){
         if (errors.hasErrors()){
             model.addAttribute("form", form);
             return "recipe/add-ingredients";
@@ -169,12 +167,8 @@ public class RecipeController {
         recipeDao.save(edited);
 
         model.addAttribute("message", "Successfully edited!");
-
-        //List<AddIngredientsDao> lists = edited.getAddIngredientsToRecipes();
         model.addAttribute("title", "Ingredient needed for " + edited.getRecipeName());
-        //model.addAttribute("ingredientLists", lists);
-
-        return "addIngredients/viewWithMsg";
+        return "redirect:/recipe/view/" + edited.getId();
     }
 
     //recipes in a course

@@ -3,7 +3,10 @@ package org.launchcode.demo.models.forms;
 import org.launchcode.demo.models.Ingredient;
 import org.launchcode.demo.models.Recipe;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddIngredientsToRecipeForm {
