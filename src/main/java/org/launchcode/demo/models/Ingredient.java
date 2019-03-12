@@ -22,6 +22,10 @@ public class Ingredient {
     @ManyToMany(mappedBy = "ingredients")
     private List<Recipe> recipes;
 
+    @OneToMany
+    @JoinColumn(name = "ingredient_id")
+    private List<Quantity> quantities;
+
     public Ingredient(){}
 
     public Ingredient(String ingredientName) {
@@ -40,4 +44,11 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
+    public List<Quantity> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(Quantity quantity){
+        quantities.add(quantity);
+    }
 }

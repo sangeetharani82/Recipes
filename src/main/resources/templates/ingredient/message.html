@@ -12,6 +12,8 @@
     <a th:href="@{'/ingredient/add'}" th:object="${ingredient}" method="get">
         <button class="btn btn-success">Add an Ingredient</button>
     </a>
+    <button type="button" class="btn btn-secondary" onclick="goBack()">Go Back</button>
+    <script>function goBack() {  window.history.go(-2);}</script>
 </div>
 </body>
 </html>

@@ -47,4 +47,5 @@ public class AddIngredientsToRecipeForm {
     public void setIngredientIds(List<Integer> ingredientIds) {
         this.ingredientIds = ingredientIds;
     }
+
 }

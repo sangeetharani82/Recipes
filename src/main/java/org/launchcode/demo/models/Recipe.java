@@ -48,9 +48,9 @@ public class Recipe {
     @ManyToMany
     private List<Ingredient> ingredients;
 
-//    @OneToMany
-//    @JoinColumn(name = "recipe_id")
-//    private List<RateComment> rateCommentList = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "recipe_id")
+    private List<Quantity> quantities;
 
     public Recipe(String recipeName, int servingSize, String prepTime, String cookTime, String direction) {
         this();
@@ -133,4 +133,12 @@ public class Recipe {
             ingredients.add(ingredient);
         }
     }
+
+    public List<Quantity> getQuantities() {
+        return quantities;
+    }
+    public void addQuantities(Quantity quantity){
+        quantities.add(quantity);
+    }
 }
+

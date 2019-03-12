@@ -16,8 +16,9 @@
     <a th:href="'/recipe/add-ingredients/' + ${recipe.id}">
         <button class="btn btn-success">Add Ingredients To Recipe</button>
     </a>
-    <a th:href="'/recipe/specify-quantity/' + ${recipe.id}">
-        <button class="btn btn-success">Specify the quantities</button>
+
+    <a th:href="@{'/ingredient/add'}" th:object="${ingredient}" method="get">
+        <button class="btn btn-success">Create a new Ingredient</button>
     </a>
     <hr/>
     <p th:unless="${recipe.ingredients.size()}">No Ingredients added yet</p>
@@ -26,13 +27,28 @@
         <thead>
             <tr>
                 <th>Ingredient</th>
-                <th>Quantity</th>
             </tr>
         </thead>
         <tr th:each = "ingredients : ${recipe.ingredients}">
             <tr th:each="ingredient : ${ingredients}">
                 <td th:id="${ingredient.id}" th:text="${ingredient.ingredientName}"></td>
+                <td>
+                    <p th:if="${recipe.quantities.size() != recipe.ingredients.size()}">
+                    <a th:href="@{'/recipe/specify-quantity/'}+${recipe.id}+'/'+${ingredient.id}" th:object="${form}" method="get">
+                        <button class="btn btn-success">Specify Quantity</button>
+                    </a></p>
+                </td>
             </tr>
+        </tr>
+        <thead>
+        <tr>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tr th:each = "quantities : ${recipe.quantities}">
+        <tr th:each="quantity : ${quantities}">
+            <td th:id="${quantity.id}" th:text="${quantity.amount}"></td>
+        </tr>
         </tr>
     </table>
     <hr/>

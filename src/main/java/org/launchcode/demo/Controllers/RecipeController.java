@@ -1,15 +1,18 @@
 package org.launchcode.demo.Controllers;
 
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.launchcode.demo.models.*;
 import org.launchcode.demo.models.data.*;
 import org.launchcode.demo.models.forms.AddIngredientsToRecipeForm;
+import org.launchcode.demo.models.forms.AddQuantityToIngredientForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +33,9 @@ public class RecipeController {
 
     @Autowired
     IngredientDao ingredientDao;
+
+    @Autowired
+    QuantityDao quantityDao;
 
     // Request path: /recipe
     @RequestMapping(value = "")
@@ -72,8 +78,15 @@ public class RecipeController {
     @RequestMapping(value="view/{id}", method = RequestMethod.GET)
     public String viewMenu(@PathVariable int id, Model model){
         Recipe recipe = recipeDao.findOne(id);
+        List<Quantity> quantities = new ArrayList<>();
+        for (Ingredient ingredient : recipe.getIngredients()){
+            for (Quantity quantity : ingredient.getQuantities()){
+                quantities.add(quantity);
+            }
+        }
         model.addAttribute("title", recipe.getRecipeName());
         model.addAttribute("recipe", recipe);
+        model.addAttribute("quantities", quantities);
         model.addAttribute("message", "Added successfully!");
         return "recipe/view";
     }
@@ -88,7 +101,6 @@ public class RecipeController {
         model.addAttribute("form", form);
         return "recipe/add-ingredients";
     }
-
 
     @RequestMapping(value="add-ingredients", method = RequestMethod.POST)
     public String processAddIngredients(@ModelAttribute @Valid AddIngredientsToRecipeForm form, Errors errors,
@@ -112,12 +124,16 @@ public class RecipeController {
     @RequestMapping(value="single/{id}", method = RequestMethod.GET)
     public String singleRecipe(@PathVariable int id, Model model){
         Recipe recipe = recipeDao.findOne(id);
+        HashMap<Ingredient, Quantity> ingredientsAndQuantities = new HashMap<>();
+        for (int i=0; i<recipe.getIngredients().size(); i++){
+            ingredientsAndQuantities.put(recipe.getIngredients().get(i), recipe.getQuantities().get(i));
+        }
         model.addAttribute("title", recipe.getRecipeName());
         model.addAttribute("course", recipe.getCourse());
         model.addAttribute("category", recipe.getCategory());
         model.addAttribute("recipe", recipe);
         model.addAttribute("title", recipe.getRecipeName());
-        model.addAttribute("ingredientLists", recipe.getIngredients());
+        model.addAttribute("ingredientsAndQuantities", ingredientsAndQuantities);
         return "recipe/single";
     }
 
@@ -183,5 +199,35 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
         model.addAttribute("title", cat.getCategoryName() + " recipes");
         return "recipe/list-under";
+    }
+
+
+    @RequestMapping(value = "specify-quantity/{recipeId}/{ingredientId}", method = RequestMethod.GET)
+    public String displaySpecifyQuantityForm(@PathVariable int recipeId, @PathVariable int ingredientId, Model model){
+        String quantity = "";
+        Ingredient ingredient = ingredientDao.findOne(ingredientId);
+        Recipe recipe = recipeDao.findOne(recipeId);
+        AddQuantityToIngredientForm form = new AddQuantityToIngredientForm(recipe, ingredient, quantity);
+        model.addAttribute("title", "Specify quantity for " + ingredient.getIngredientName());
+        model.addAttribute("form", form);
+        return "recipe/specify-quantity";
+    }
+
+    @RequestMapping(value="specify-quantity", method = RequestMethod.POST)
+    public String processSpecifyQuantityForm(@ModelAttribute @Valid AddQuantityToIngredientForm form, Errors errors,
+                                        Model model){
+        if (errors.hasErrors()){
+            model.addAttribute("form", form);
+            return "recipe/specify-quantity";
+        }
+        Ingredient ingredient = ingredientDao.findOne(form.getIngredientId());
+        Recipe recipe = recipeDao.findOne(form.getRecipeId());
+        Quantity quantity = new Quantity(recipe, ingredient, form.getAmount());
+        ingredient.setQuantities(quantity);
+        quantityDao.save(quantity);
+        recipe.addQuantities(quantity);
+        recipeDao.save(recipe);
+        ingredientDao.save(ingredient);
+        return "redirect:view/" + recipe.getId();
     }
 }
