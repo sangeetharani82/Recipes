@@ -167,10 +167,12 @@ public class RecipeController {
     public String removeIngredientAndQuantity(@PathVariable int quantityId, Model model){
         Quantity quantity = quantityDao.findOne(quantityId);
         quantityDao.delete(quantity);
+        Recipe recipe = recipeDao.findOne(quantity.getRecipe().getId());
+        recipe.removeIngredient(quantity.getIngredient());
+        recipeDao.save(recipe);
         model.addAttribute("message", "Ingredient and Quantity removed successfully");
         return "recipe/message";
     }
-
 
     //view single recipe
     @RequestMapping(value="single/{id}", method = RequestMethod.GET)

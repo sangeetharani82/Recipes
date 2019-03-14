@@ -154,14 +154,9 @@ public class Recipe {
         quantities.add(quantity);
     }
 
-//    public HashMap<Ingredient, Quantity> getIngredientsAndQuantities() {
-//        return ingredientsAndQuantities;
-//    }
-//
-////    public void addIngredientAndQuantity(List<Ingredient> ingredientList, List<Quantity> quantities){
-////        for (int i=0; i<ingredientList.size(); i++){
-////            ingredientsAndQuantities.put(ingredientList.get(i), quantities.get(i));
-////        }
-////    }
+    public void removeIngredient(Ingredient ingredient){
+        ingredients.remove(ingredient);
+    }
+
 }
 
