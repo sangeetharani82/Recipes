@@ -25,31 +25,42 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Ingredient</th>
-            </tr>
-        </thead>
-        <tr th:each = "ingredients : ${recipe.ingredients}">
-            <tr th:each="ingredient : ${ingredients}">
-                <td th:id="${ingredient.id}" th:text="${ingredient.ingredientName}"></td>
-                <td>
-                    <p th:if="${recipe.quantities.size() != recipe.ingredients.size()}">
-                    <a th:href="@{'/recipe/specify-quantity/'}+${recipe.id}+'/'+${ingredient.id}" th:object="${form}" method="get">
-                        <button class="btn btn-success">Specify Quantity</button>
-                    </a></p>
-                </td>
-            </tr>
-        </tr>
-        <thead>
         <tr>
+            <th>Ingredient</th>
             <th>Quantity</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tr th:each = "quantities : ${recipe.quantities}">
-        <tr th:each="quantity : ${quantities}">
-            <td th:id="${quantity.id}" th:text="${quantity.amount}"></td>
+            <tr th:each="quantity : ${quantities}">
+                <td th:text="${quantity.ingredient.ingredientName}"></td>
+                <td th:id="${quantity.id}" th:text="${quantity.amount}"></td>
+                <td>
+                    <a th:href="@{'/recipe/remove/'+ ${quantity.id}}" th:object="${recipe}" method="post">
+                        <button type="submit" class="btn btn-danger" onClick="return confirm('sure?')">Remove</button>
+                    </a>
+                </td>
+            </tr>
         </tr>
-        </tr>
+        <p th:if="${recipe.quantities.size() != recipe.ingredients.size()}">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Specify the quantity</th>
+                </tr>
+            </thead>
+
+            <tr th:each = "ingredients : ${recipe.ingredients}">
+                <tr th:each="ingredient : ${ingredients}">
+                    <td th:id="${ingredient.id}" th:text="${ingredient.ingredientName}"></td>
+                    <td>
+                        <a th:href="@{'/recipe/specify-quantity/'}+${recipe.id}+'/'+${ingredient.id}" th:object="${form}" method="get">
+                            <button class="btn btn-success">Specify Quantity</button>
+                        </a>
+                    </td>
+                </tr>
+            </tr>
+        </p>
     </table>
     <hr/>
 </div>

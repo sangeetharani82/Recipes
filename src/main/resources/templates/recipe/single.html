@@ -47,34 +47,50 @@
                 <th>Ingredient</th>
                 <th>Quantity</th>
             </tr>
-            <tr th:each = "list : ${ingredientsAndQuantities}">
-                <td th:text="${list.key.ingredientName}"></td>
-                <td th:text="${list.value.amount}"></td>
-            </tr>
-        </table>
-        <!--<table class="table">
-            <tr>
-                <th>Ingredient</th>
-            </tr>
-            <tr th:each = "list : ${ingredientLists}">
-            <tr>
-                <td th:text="${list.ingredientName}"
-                    th:id="${list.id}"></td>
-            </tr>
+            <tr th:each = "quantity : ${quantities}">
+                <tr>
+                    <td th:text="${quantity.ingredient.ingredientName}"></td>
+                    <td th:text="${quantity.amount}"
+                        th:id="${quantity.id}"></td>
+
+                </tr>
             </tr>
         </table>
 
-        <table class="table">
-            <tr>
-                <th>Quantity</th>
-            </tr>
-            <tr th:each = "list : ${quantities}">
-            <tr>
-                <td th:text="${list.amount}"
-                    th:id="${list.id}"></td>
-            </tr>
-            </tr>
-        </table>-->
+        <!--<div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table">
+                        <tr>
+                            <th>Ingredient</th>
+                        </tr>
+                        <tr th:each = "ingredient : ${ingredients}">
+                        <tr>
+                            <td th:text="${ingredient.ingredientName}"
+                                th:id="${ingredient.id}"></td>
+                        </tr>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm">
+                    <table class="table">
+                        <tr>
+                            <th>Ingredient</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr th:each = "quantity : ${quantities}">
+                        <tr>
+                        <td th:text="${quantity.ingredient.ingredientName}"></td>
+                            <td th:text="${quantity.amount}"
+                                th:id="${quantity.id}"></td>
+
+                        </tr>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>-->
+
     </div>
 </div>
 

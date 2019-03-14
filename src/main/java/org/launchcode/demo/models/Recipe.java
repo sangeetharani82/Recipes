@@ -52,6 +52,8 @@ public class Recipe {
     @JoinColumn(name = "recipe_id")
     private List<Quantity> quantities;
 
+//    private HashMap<Ingredient, Quantity> ingredientsAndQuantities = new HashMap<>();
+
     public Recipe(String recipeName, int servingSize, String prepTime, String cookTime, String direction) {
         this();
         this.recipeName = recipeName;
@@ -133,12 +135,33 @@ public class Recipe {
             ingredients.add(ingredient);
         }
     }
+    public void deleteIngredients(List<Ingredient> ingredientList){
+        for (Ingredient ingredient : ingredientList){
+            ingredients.remove(ingredient);
+        }
+    }
+    public void deleteQuantities(List<Quantity> quantityList){
+        for (Quantity quantity : quantityList){
+            quantities.remove(quantity);
+        }
+    }
 
     public List<Quantity> getQuantities() {
         return quantities;
     }
+
     public void addQuantities(Quantity quantity){
         quantities.add(quantity);
     }
+
+//    public HashMap<Ingredient, Quantity> getIngredientsAndQuantities() {
+//        return ingredientsAndQuantities;
+//    }
+//
+////    public void addIngredientAndQuantity(List<Ingredient> ingredientList, List<Quantity> quantities){
+////        for (int i=0; i<ingredientList.size(); i++){
+////            ingredientsAndQuantities.put(ingredientList.get(i), quantities.get(i));
+////        }
+////    }
 }
 

@@ -2,6 +2,10 @@ package org.launchcode.demo.Controllers;
 
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.launchcode.demo.Comparators.CategoryComparator;
+import org.launchcode.demo.Comparators.CourseComparator;
+import org.launchcode.demo.Comparators.IngredientComparator;
+import org.launchcode.demo.Comparators.RecipeComparator;
 import org.launchcode.demo.models.*;
 import org.launchcode.demo.models.data.*;
 import org.launchcode.demo.models.forms.AddIngredientsToRecipeForm;
@@ -37,11 +41,21 @@ public class RecipeController {
     @Autowired
     QuantityDao quantityDao;
 
+    RecipeComparator recipeComparator = new RecipeComparator();
+    CourseComparator courseComparator = new CourseComparator();
+    CategoryComparator categoryComparator = new CategoryComparator();
+    IngredientComparator ingredientComparator = new IngredientComparator();
+
     // Request path: /recipe
     @RequestMapping(value = "")
     public String index(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
-        model.addAttribute("title", "All recipes");
+        ArrayList<Recipe> lists = new ArrayList<>();
+        for (Recipe recipe : recipeDao.findAll()){
+            lists.add(recipe);
+        }
+        lists.sort(recipeComparator);
+        model.addAttribute("recipes", lists);
+        model.addAttribute("title", "Recipes");
         return "recipe/index";
     }
 
@@ -50,8 +64,20 @@ public class RecipeController {
     public String displayAddRecipeForm(Model model) {
         model.addAttribute("title", "Add recipes");
         model.addAttribute(new Recipe());
-        model.addAttribute("courses", courseDao.findAll());
-        model.addAttribute("categories", categoryDao.findAll());
+        ArrayList<Course> courses = new ArrayList<>();
+        for (Course course : courseDao.findAll()){
+            courses.add(course);
+        }
+        courses.sort(courseComparator);
+
+        ArrayList<Category> categories = new ArrayList<>();
+        for (Category category : categoryDao.findAll()){
+            categories.add(category);
+        }
+        categories.sort(categoryComparator);
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("categories", categories);
         return "recipe/add";
     }
 
@@ -60,8 +86,20 @@ public class RecipeController {
                                        Errors errors, @RequestParam int courseId, @RequestParam int categoryId) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Create a recipe");
-            model.addAttribute("courses", courseDao.findAll());
-            model.addAttribute("categories", categoryDao.findAll());
+            ArrayList<Course> courses = new ArrayList<>();
+            for (Course course : courseDao.findAll()){
+                courses.add(course);
+            }
+            courses.sort(courseComparator);
+
+            ArrayList<Category> categories = new ArrayList<>();
+            for (Category category : categoryDao.findAll()){
+                categories.add(category);
+            }
+            categories.sort(categoryComparator);
+
+            model.addAttribute("courses", courses);
+            model.addAttribute("categories", categories);
             return "recipe/add";
         }
 
@@ -76,7 +114,7 @@ public class RecipeController {
     }
 
     @RequestMapping(value="view/{id}", method = RequestMethod.GET)
-    public String viewMenu(@PathVariable int id, Model model){
+    public String view(@PathVariable int id, Model model){
         Recipe recipe = recipeDao.findOne(id);
         List<Quantity> quantities = new ArrayList<>();
         for (Ingredient ingredient : recipe.getIngredients()){
@@ -96,7 +134,12 @@ public class RecipeController {
 
         Recipe recipe = recipeDao.findOne(recipeId);
         AddIngredientsToRecipeForm form = new AddIngredientsToRecipeForm(recipe, ingredientDao.findAll());
-        model.addAttribute("ingredients", ingredientDao.findAll());
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        for (Ingredient ingredient : ingredientDao.findAll()){
+            ingredients.add(ingredient);
+        }
+        ingredients.sort(ingredientComparator);
+        model.addAttribute("ingredients", ingredients);
         model.addAttribute("title", "Add Ingredients to " + recipe.getRecipeName());
         model.addAttribute("form", form);
         return "recipe/add-ingredients";
@@ -119,27 +162,36 @@ public class RecipeController {
         recipeDao.save(theRecipe);
         return "redirect:view/" + theRecipe.getId();
     }
+    //delete the ingredient and quantity from the recipe
+    @RequestMapping(value = "remove/{quantityId}")
+    public String removeIngredientAndQuantity(@PathVariable int quantityId, Model model){
+        Quantity quantity = quantityDao.findOne(quantityId);
+        quantityDao.delete(quantity);
+        model.addAttribute("message", "Ingredient and Quantity removed successfully");
+        return "recipe/message";
+    }
+
 
     //view single recipe
     @RequestMapping(value="single/{id}", method = RequestMethod.GET)
     public String singleRecipe(@PathVariable int id, Model model){
         Recipe recipe = recipeDao.findOne(id);
-        HashMap<Ingredient, Quantity> ingredientsAndQuantities = new HashMap<>();
-        for (int i=0; i<recipe.getIngredients().size(); i++){
-            ingredientsAndQuantities.put(recipe.getIngredients().get(i), recipe.getQuantities().get(i));
-        }
         model.addAttribute("title", recipe.getRecipeName());
         model.addAttribute("course", recipe.getCourse());
         model.addAttribute("category", recipe.getCategory());
         model.addAttribute("recipe", recipe);
         model.addAttribute("title", recipe.getRecipeName());
-        model.addAttribute("ingredientsAndQuantities", ingredientsAndQuantities);
+        model.addAttribute("ingredients", recipe.getIngredients());
+        model.addAttribute("quantities", recipe.getQuantities());
         return "recipe/single";
     }
 
     // delete each recipe
-    @RequestMapping(value = "delete/{recipeId}")
+    @RequestMapping(value = "delete/{recipeId}", method = RequestMethod.POST)
     public String delete(@PathVariable int recipeId, Model model){
+        Recipe recipe = recipeDao.findOne(recipeId);
+        recipe.deleteIngredients(recipe.getIngredients());
+        recipe.deleteQuantities(recipe.getQuantities());
         recipeDao.delete(recipeId);
         model.addAttribute("message", "Recipe deleted successfully!");
         return "recipe/message";

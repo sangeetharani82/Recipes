@@ -21,14 +21,13 @@
         </thead>
     </table>
     <form method="post" style="max-width:500px;" th:object="${form}" action="/recipe/add-ingredients">
+        <button type="submit" class="btn btn-success">Add</button>
         <div th:each="ingredient : ${ingredients}" class="checkbox">
             <input type="checkbox" name="ingredientIds"
                    th:value="${ingredient.id}" th:id="${ingredient.id}"/>
             <label th:for="${ingredient.id}" th:text="${ingredient.ingredientName}"></label>
             <input type="hidden" name="recipeId" th:value="*{recipe.id}" />
         </div>
-
-        <button type="submit" class="btn btn-success">Add</button>
     </form>
     <hr/>
 </div>
