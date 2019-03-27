@@ -4,6 +4,7 @@ import org.launchcode.demo.models.Ingredient;
 import org.launchcode.demo.models.Recipe;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class AddQuantityToIngredientForm {
 
@@ -12,6 +13,7 @@ public class AddQuantityToIngredientForm {
     private Ingredient ingredient;
 
     @NotNull
+    @Size(min = 1, message = "Specify the quantity")
     private String amount;
 
     @NotNull

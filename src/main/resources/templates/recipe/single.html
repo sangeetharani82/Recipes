@@ -16,15 +16,15 @@
             <tr>
                 <th>Title</th>
                 <td th:id="${i.id}"
-                    th:text="${i.recipeName}"></td>
+                    th:text="${#strings.capitalize(i.recipeName)}"></td>
             </tr>
             <tr>
                 <th>Course</th>
-                <td th:text="${course.courseName}"></td>
+                <td th:text="${#strings.capitalize(course.courseName)}"></td>
             </tr>
             <tr>
                 <th>Category</th>
-                <td th:text="${category.categoryName}"></td>
+                <td th:text="${#strings.capitalize(category.categoryName)}"></td>
             </tr>
             <tr>
                 <th>Serving Size</th>
@@ -41,7 +41,7 @@
 
             <tr>
                 <th>Direction</th>
-                <td th:text="${i.direction}"></td>
+                <td th:text="${#strings.capitalize(i.direction)}"></td>
             </tr>
             <tr>
                 <th>Ingredient</th>
@@ -49,7 +49,7 @@
             </tr>
             <tr th:each = "quantity : ${quantities}">
                 <tr>
-                    <td th:text="${quantity.ingredient.ingredientName}"></td>
+                    <td th:text="${#strings.capitalize(quantity.ingredient.ingredientName)}"></td>
                     <td th:text="${quantity.amount}"
                         th:id="${quantity.id}"></td>
 

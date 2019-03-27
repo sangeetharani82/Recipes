@@ -29,7 +29,7 @@
         </thead>
         <tr th:each="recipe : ${recipes}">
         <tr>
-            <td th:text="${recipe.recipeName}"
+            <td th:text="${#strings.capitalize(recipe.recipeName)}"
                 th:id="${recipe.id}"></td>
             <div class="btn-group">
                 <td>
@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     <a th:href="@{'/recipe/delete/'+${recipe.id}}" th:object="${recipe}" method="post">
-                        <button type="button" class="btn btn-danger" onClick="return confirm('Are you sure?')">Delete</button>
+                        <button type="submit" class="btn btn-danger" onClick="return confirm('Are you sure?')">Delete</button>
                     </a>
                 </td>
                 <td  th:id="${recipe.id}"><a th:href="@{'/rate/recipe?id=' + ${recipe.id}}">

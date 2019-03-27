@@ -23,7 +23,7 @@
         </thead>
         <tr th:each="recipe : ${recipes}">
         <tr>
-            <td th:text="${recipe.recipeName} +' '+ ${average}"
+            <td th:text="${#strings.capitalize(recipe.recipeName)}"
                 th:id="${recipe.id}"></td>
             <div class="btn-group">
                 <td>

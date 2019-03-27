@@ -48,6 +48,10 @@ public class Ingredient {
         return quantities;
     }
 
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
     public void setQuantities(Quantity quantity){
         quantities.add(quantity);
     }
