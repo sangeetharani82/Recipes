@@ -133,13 +133,15 @@ public class Recipe {
             ingredients.add(ingredient);
         }
     }
+
+    public void removeIngredient(Ingredient ingredient){
+        ingredients.remove(ingredient);
+    }
+
     public void deleteIngredients(List<Ingredient> ingredientList){
         ingredients.removeAll(ingredientList);
     }
 
-    public void deleteQuantities(List<Quantity> quantityList){
-        quantities.removeAll(quantityList);
-    }
     public List<Quantity> getQuantities() {
         return quantities;
     }
@@ -148,8 +150,8 @@ public class Recipe {
         quantities.add(quantity);
     }
 
-    public void removeIngredient(Ingredient ingredient){
-        ingredients.remove(ingredient);
+    public void deleteQuantities(List<Quantity> quantityList){
+        quantities.removeAll(quantityList);
     }
 
 }

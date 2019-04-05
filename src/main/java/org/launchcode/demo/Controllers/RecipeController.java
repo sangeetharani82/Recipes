@@ -162,9 +162,9 @@ public class RecipeController {
         recipe.removeIngredient(quantity.getIngredient());
         recipeDao.save(recipe);
         model.addAttribute("message", "Ingredient and Quantity removed successfully");
-        //return "recipe/message";
         return "redirect:/recipe/view/" + recipe.getId();
     }
+
     //delete the ingredient from the recipe
     @RequestMapping(value = "del/{recipeId}/{ingredientId}")
     public String removeIngredient(@PathVariable int recipeId, @PathVariable int ingredientId, Model model){
